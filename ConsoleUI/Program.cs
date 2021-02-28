@@ -22,22 +22,31 @@ namespace ConsoleUI
         {
             CategoryManager categoryManager = new CategoryManager(new EfCategoryDal());
 
-            foreach (var categories in categoryManager.GetAll())
+            foreach (var categories in categoryManager.GetAll().Data)
             {
                 Console.WriteLine(categories.CategoryName);
                 Console.WriteLine("-----------------------");
             }
-            Console.WriteLine("Al sana birinci :" + categoryManager.GetById(1).CategoryName);
+            Console.WriteLine("Al sana birinci :" + categoryManager.GetById(1).Data);
         }
 
         private static void ProductManager()
         {
-            ProductManager productManager = new ProductManager(new EfProductDal());
+            ProductManager productManager = new ProductManager(new EfProductDal(),new CategoryManager(new EfCategoryDal()));
 
-            foreach (var product in productManager.GetProductDetails())
+            var result = productManager.GetProductDetails();
+
+            if (result.Success)
+            {
+                foreach (var product in productManager.GetProductDetails().Data)
             {
                 Console.WriteLine(product.ProductName + "   "+ product.CategoryName);
             } 
+            }else
+            {
+                Console.WriteLine(result.Message);
+            }
+            
 
 
         }
