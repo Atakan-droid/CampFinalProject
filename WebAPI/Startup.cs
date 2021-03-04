@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Business.Concrete;
+using Core.DependencyResolvers;
+using Core.Extensions;
 using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
 using DataAccess.Abstract;
@@ -37,10 +39,9 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            ServiceTool.Create(services);
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-           
-
+            
+          
+            
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -57,6 +58,9 @@ namespace WebAPI
                         IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
                     };
                 });
+           services.AddDependencyResolvers(new ICoreModule[] {
+                 new CoreModule()
+            });
 
            
         }
