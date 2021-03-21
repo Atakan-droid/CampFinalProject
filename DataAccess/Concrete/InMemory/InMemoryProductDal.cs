@@ -9,7 +9,7 @@ using System.Text;
 
 namespace DataAccess.Concrete.InMemory
 {
-   public class InMemoryProductDal : IProductDal
+   public class InMemoryProductDal : //IProductDal
     {
         List<Product> _products;
 
@@ -55,13 +55,7 @@ namespace DataAccess.Concrete.InMemory
             throw new NotImplementedException();
         }
 
-        public List<Product> GetAllCategory(int categoryId)
-        {
-            //yeni liste yapıp onu döndürür.
-          return  _products.Where(p => p.CategoryId == categoryId).ToList();
-        }
-
-        public List<ProductDetailDto> GetProductDetails()
+        public List<ProductDetailDto> GetProductDetails(int i)
         {
             throw new NotImplementedException();
         }

@@ -33,15 +33,27 @@ namespace WebAPI
         }
 
         public IConfiguration Configuration { get; }
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         //Autofac,ninject,CastleWindsor,StructureMap,LightInject,DryInjetc --> IoC Container
         //AOP 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            
-          
-            
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins(
+                                                          )
+                                                          .AllowAnyHeader()
+                                                          .AllowAnyMethod();
+                                  });
+            });
+
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -72,9 +84,10 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.ConfigureCustomExceptionMiddleware();
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader());
             app.UseHttpsRedirection();
-
+          
             app.UseRouting();
 
             app.UseAuthentication();

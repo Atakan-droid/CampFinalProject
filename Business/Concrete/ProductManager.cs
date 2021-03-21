@@ -41,18 +41,15 @@ namespace Business.Concrete
             //Is kodları yazılır.
             //Yetkisi var mı?
             //Soyle mi boyle mi
-            if (DateTime.Now.Hour == 23)
-            {
-                return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
-            }
+           
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(),"Doru oldu");
         }
 
 
         public IDataResult<List<Product>> GetAllByCategoryId(int id)
         {
-
-            return  new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == id), "nice");
+         
+            return  new SuccessDataResult<List<Product>>(  _productDal.GetAll(p => p.CategoryId == id), "nice");
         }
 
         [CacheAspect]
@@ -68,10 +65,8 @@ namespace Business.Concrete
 
         public IDataResult<List<ProductDetailDto>> GetProductDetails()
         {
-            if (DateTime.Now.Hour == 0)
-            {
-                return new ErrorDataResult<List<ProductDetailDto>>(Messages.MaintenanceTime);
-            }
+          
+
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails(), "İyi iş");
         }
 
@@ -85,7 +80,7 @@ namespace Business.Concrete
      // [SecuredOperation("product.add")] //Claim idda etmek 
         [ValidationAspect(typeof(ProductValidator))]
         [CacheRemoveAspect("IProductService.Get")]
-        IResult IProductService.Add(Product product)
+        public IResult Add(Product product)
         {
             IResult result = BusinessRules.Run(CheckIfProductCountOfCategoryCorrect(product.CategoryId),
                  IfProductNameEqual(product.ProductName), IfCategoryIdMoreThan());
@@ -123,7 +118,11 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
-       
+
+        public IDataResult<List<Product>> GetByCategoryId(int categoryId)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     
