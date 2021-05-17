@@ -1,6 +1,6 @@
 ### Multi-Tier-Architecture-with-Nortwind
 
-#N-tier architecture style
+# N-tier architecture style with using C#/Northwind database
 
 An N-tier architecture divides an application into logical layers and physical tiers.
 
